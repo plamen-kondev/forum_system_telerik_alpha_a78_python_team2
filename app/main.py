@@ -1,6 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from app.database import read_query
+from fastapi.responses import JSONResponse
+from app.database import read_query
+from app.common.exceptions import AppError
+
 
 app = FastAPI(
     title="Hot Takes API",
@@ -19,4 +23,8 @@ def health():
     except Exception:
         db_status = "unreachable"
     return {"status": "ok", "database": db_status}
+
+@app.exception_handler(AppError)
+def handle_app_error(request: Request, exc: AppError):
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
