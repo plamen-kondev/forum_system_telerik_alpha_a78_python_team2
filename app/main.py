@@ -6,6 +6,7 @@ from app.database import read_query
 from app.common.exceptions import AppError
 from app.routers.api import auth as auth_api
 from app.routers.api import topics as topics_api
+from app.routers.api import replies as replies_api
 
 app = FastAPI(
     title="Hot Takes API",
@@ -31,3 +32,4 @@ def handle_app_error(request: Request, exc: AppError):
 
 app.include_router(auth_api.router)
 app.include_router(topics_api.router)
+app.include_router(replies_api.router)
