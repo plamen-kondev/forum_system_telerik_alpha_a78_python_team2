@@ -5,7 +5,6 @@ from fastapi.responses import JSONResponse
 from app.database import read_query
 from app.common.exceptions import AppError
 from app.routers.api import auth as auth_api
-from app.routers.api import replies as replies_api
 
 
 app = FastAPI(
@@ -31,4 +30,3 @@ def handle_app_error(request: Request, exc: AppError):
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
 app.include_router(auth_api.router)
-app.include_router(replies_api.router)
