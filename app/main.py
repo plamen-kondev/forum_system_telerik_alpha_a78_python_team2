@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 from app.database import read_query
 from app.common.exceptions import AppError
 from app.routers.api import auth as auth_api
+from app.routers.api import topics as topics_api
 from app.routers.api import replies as replies_api
 from app.routers.api import reply_votes as reply_votes_api
 
