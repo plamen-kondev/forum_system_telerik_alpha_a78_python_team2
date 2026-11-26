@@ -7,7 +7,6 @@ from app.common.exceptions import AppError
 from app.routers.api import auth as auth_api
 from app.routers.api import topics as topics_api
 from app.routers.api import replies as replies_api
-from app.routers.api import reply_votes as reply_votes_api
 
 
 app = FastAPI(
@@ -33,5 +32,5 @@ def handle_app_error(request: Request, exc: AppError):
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
 
 app.include_router(auth_api.router)
+app.include_router(topics_api.router)
 app.include_router(replies_api.router)
-app.include_router(reply_votes_api.router)
