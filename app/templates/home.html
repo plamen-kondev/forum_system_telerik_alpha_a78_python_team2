@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-5">
+
+        <div class="col-lg-8">
+            <h1 class="home-title">Say the thing nobody agrees with.</h1>
+            <p class="lede">
+                Hot Takes is a forum for unpopular opinions. Post a take, defend it in the replies,
+                and see which arguments people actually find convincing.
+            </p>
+            <div class="d-flex flex-wrap gap-3 align-items-center mb-5">
+                {% if user %}
+                    <a href="/topics/new" class="btn btn-hot">Post a take</a>
+                {% else %}
+                    <a href="/register" class="btn btn-hot">Create an account</a>
+                {% endif %}
+                <a href="/topics" class="link-quiet">Browse all opinions</a>
+            </div>
+
+            <h2 class="section-title">Latest takes</h2>
+
+            {% if latest_topics %}
+                <ul class="take-list">
+                    {% for topic in latest_topics %}
+                        <li class="take">
+                            <a href="/topics/{{ topic.id }}" class="take-title">{{ topic.title }}</a>
+                            <div class="take-meta">
+                                <span>Posted by <strong>{{ topic.author_username }}</strong> in {{ topic.category_name }}</span>
+                                <span>{{ topic.created_at.strftime('%d %b %Y') }}</span>
+                                <span class="take-replies">
+                                    {{ topic.reply_count }} {{ "reply" if topic.reply_count == 1 else "replies" }}
+                                </span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="empty-state">
+                    <p class="mb-1 fw-semibold">No takes yet.</p>
+                    <p class="mb-0">
+                        {% if user %}
+                            <a href="/topics/new">Post the first one</a> and start the argument.
+                        {% else %}
+                            <a href="/register">Create an account</a> to post the first one.
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+        </div>
+
+        <aside class="col-lg-4">
+            <section class="side-block">
+                <h2>How it works</h2>
+                <ol class="side-steps">
+                    <li>Post an opinion in one of the categories.</li>
+                    <li>Others reply with arguments for or against it.</li>
+                    <li>Everyone votes on the arguments, not on the opinion.</li>
+                    <li>The author marks the reply that convinced them most.</li>
+                </ol>
+            </section>
+
+            <section class="side-block">
+                <h2>House rule</h2>
+                <p class="mb-0">Challenge opinions, not people. Personal attacks get removed and repeat offenders get blocked.</p>
+            </section>
+
+            <section class="side-block">
+                <h2>Community</h2>
+                <dl class="stat-list">
+                    <div><dt>Members</dt><dd>{{ stats.users }}</dd></div>
+                    <div><dt>Takes</dt><dd>{{ stats.topics }}</dd></div>
+                    <div><dt>Arguments</dt><dd>{{ stats.replies }}</dd></div>
+                </dl>
+            </section>
+
+            <section class="side-block">
+                <h2>Categories</h2>
+                <ul class="category-list">
+                    {% for category in categories %}
+                        <li>
+                            <a href="/topics?category={{ category.id }}">{{ category.name }}</a>
+                            <span>{{ category.topic_count }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </aside>
+
+    </div>
+</div>
+{% endblock %}
