@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <h1 class="auth-title">Create an account</h1>
+    <p class="auth-lede">You need an account to post takes, reply and vote.</p>
+    <form method="post" action="/register" class="auth-form" novalidate>
+        <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+                <label for="first_name" class="form-label">First name</label>
+                <input type="text" id="first_name" name="first_name" value="{{ form.first_name or '' }}"
+                       class="form-control {% if errors.first_name %}is-invalid{% endif %}"
+                       autocomplete="given-name" required>
+                {% if errors.first_name %}<div class="invalid-feedback">{{ errors.first_name }}</div>{% endif %}
+            </div>
+            <div class="col-sm-6">
+                <label for="last_name" class="form-label">Last name</label>
+                <input type="text" id="last_name" name="last_name" value="{{ form.last_name or '' }}"
+                       class="form-control {% if errors.last_name %}is-invalid{% endif %}"
+                       autocomplete="family-name" required>
+                {% if errors.last_name %}<div class="invalid-feedback">{{ errors.last_name }}</div>{% endif %}
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" name="email" value="{{ form.email or '' }}"
+                   class="form-control {% if errors.email %}is-invalid{% endif %}"
+                   autocomplete="email" required>
+            {% if errors.email %}<div class="invalid-feedback">{{ errors.email }}</div>{% endif %}
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" name="username" value="{{ form.username or '' }}"
+                   class="form-control {% if errors.username %}is-invalid{% endif %}"
+                   autocomplete="username" aria-describedby="username-help" required>
+            {% if errors.username %}
+                <div class="invalid-feedback">{{ errors.username }}</div>
+            {% else %}
+                <div id="username-help" class="form-text">2 to 16 characters. You can't change it later.</div>
+            {% endif %}
+        </div>
+        <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" name="password"
+                   class="form-control {% if errors.password %}is-invalid{% endif %}"
+                   autocomplete="new-password" aria-describedby="password-help" required>
+            {% if errors.password %}
+                <div class="invalid-feedback">{{ errors.password }}</div>
+            {% else %}
+                <div id="password-help" class="form-text">At least 8 characters.</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-hot w-100">Create account</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="/login">Log in</a></p>
+</div>
+{% endblock %}
