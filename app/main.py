@@ -9,6 +9,7 @@ from app.routers.api import topics as topics_api
 from app.routers.api import replies as replies_api
 from app.routers.api import reply_votes as reply_votes_api
 from app.routers.web import home as home_web
+from app.routers.web import auth as auth_web
 
 
 
@@ -39,3 +40,4 @@ app.include_router(topics_api.router)
 app.include_router(replies_api.router)
 app.include_router(reply_votes_api.router)
 app.include_router(home_web.router)
+app.include_router(auth_web.router)
