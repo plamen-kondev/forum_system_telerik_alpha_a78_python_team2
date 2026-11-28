@@ -1,7 +1,7 @@
 
 from fastapi import APIRouter, Depends, status
 
-from app.common.auth import require_not_blocked
+from app.common.auth import require_not_blocked, get_optional_user
 from app.models.reply_vote import ReplyVoteCreate, ReplyVoteOut
 from app.models.user import User
 from app.services import reply_vote_service
@@ -45,7 +45,7 @@ def remove_vote(
 )
 def get_vote_summary(
     reply_id: int,
-    user: User = Depends(require_not_blocked),
+    user: User | None = Depends(get_optional_user),
 ):
     return reply_vote_service.get_vote_summary(
         reply_id=reply_id,
