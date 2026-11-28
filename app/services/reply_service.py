@@ -6,8 +6,9 @@ from app.common.exceptions import (
 )
 from app.models.reply import Reply, ReplyCreate, ReplyUpdate
 from app.models.user import User
-from app.repositories import reply_repository
+from app.repositories import reply_repository, topic_repository
 from app.database import read_query
+
 
 
 def get_replies(topic_id: int) -> list[Reply]:
@@ -57,24 +58,19 @@ def delete_reply(reply_id: int, user: User) -> None:
     reply_repository.delete(reply_id)
 
 
-def _ensure_topic_exists(topic_id: int) -> None:
-    rows = read_query(
-        "SELECT id FROM topics WHERE id = ?",
-        (topic_id,)
-    )
+def _ensure_topic_exists(topic_id: int):
+    topic = topic_repository.get_topic_by_id(topic_id)
 
-    if not rows:
+    if topic is None:
         raise NotFoundError("Topic not found")
+
+    return topic
 
 
 def _ensure_topic_not_locked(topic_id: int) -> None:
-    rows = read_query(
-        "SELECT is_locked FROM topics WHERE id = ?",
-        (topic_id,)
-    )
+    topic = _ensure_topic_exists(topic_id)
 
-    if not rows:
-        raise NotFoundError("Topic not found")
-
-    if rows[0][0]:
-        raise BadRequestError("This topic is locked and cannot receive replies")
+    if topic.is_locked:
+        raise BadRequestError(
+            "This topic is locked and cannot receive replies"
+        )
